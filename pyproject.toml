@@ -1,0 +1,38 @@
+[project]
+name = "botasaurus_requests"
+version="4.0.1"
+description = "botasaurus_requests is a fork of the requests library with the playwright dependencies removed."
+authors = [
+  {name = "Chetan", email = "chetan@omkar.cloud" } # Optional
+]
+license = {file = "LICENSE"}
+readme = "README.md"
+keywords = [
+    "tls", "client", "http", "scraping", "requests", "humans"
+]
+classifiers = [
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Browsers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "orjson",
+    "httpx",
+    "geventhttpclient",
+    "urllib3",
+    "rich",
+    "click",
+    "gevent"
+]
+[project.urls]
+Homepage = "https://github.com/omkarcloud/botasaurus-requests"
+
+[build-system]
+requires = ["setuptools>=61.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.package-data]
+"botasaurus_requests" = ["py.typed"]
