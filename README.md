@@ -13,7 +13,6 @@ pip install botasaurus-requests
 ```python
 from botasaurus_requests import request
 
-driver = Driver()
 response = request.get(
     "https://www.g2.com/products/omkar-cloud/reviews",
     headers={
