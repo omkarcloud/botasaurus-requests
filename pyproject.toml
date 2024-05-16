@@ -1,6 +1,6 @@
 [project]
 name = "botasaurus_requests"
-version="4.0.1"
+version="4.0.2"
 description = "botasaurus_requests is a fork of the requests library with the playwright dependencies removed."
 authors = [
   {name = "Chetan", email = "chetan@omkar.cloud" } # Optional

@@ -31,6 +31,22 @@ arch_map = {
 }
 
 
+def move_file(src_path: Path, dst_path: Path):
+    import shutil
+    try:
+        # Check if the source file exists
+        if src_path.is_file():
+            # Create the destination directory if it doesn't exist
+            dst_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Move the file
+            shutil.move(str(src_path), str(dst_path))
+        else:
+            print(f"Source file not found: {src_path}")
+    except Exception as e:
+        print(f"Error occurred: {e}")
+
+
 class LibraryManager:
     def __init__(self) -> None:
         self.parent_path: Path = root_dir / 'bin'
@@ -96,8 +112,12 @@ class LibraryManager:
         else:
             raise IOError('Could not find a matching binary for your system.')
         # download file
-        file = self.parent_path / name
+        # file = self.parent_path / name
+        file = self.parent_path / 'temp'
         self.download_file(file, url)
+        move_file(file, self.parent_path / name)
+
+
 
     def download_file(self, file, url):
         # handle download_exec

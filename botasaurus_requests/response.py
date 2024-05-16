@@ -1,10 +1,10 @@
+from requests.utils import get_encoding_from_headers
 import re
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from http.client import responses as status_codes
 from typing import List, Literal, Optional, Union
 
-import cchardet as chardet
 from orjson import dumps, loads
 from requests.exceptions import HTTPError
 
@@ -157,9 +157,8 @@ class Response:
     proxy: Optional[str] = None
 
     def __post_init__(self) -> None:
-        if type(self.raw) is bytes:
-            self.encoding = chardet.detect(self.raw)['encoding']
-
+        self.encoding = get_encoding_from_headers(self.headers)
+        
     @property
     def reason(self) -> str:
         return status_codes[self.status_code]
