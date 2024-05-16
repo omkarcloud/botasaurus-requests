@@ -42,6 +42,23 @@ def verify_proxy(proxy: str) -> None:
     if not PROXY_PATTERN.match(proxy):
         raise ProxyFormatException(f'Invalid proxy: {proxy}')
 
+def addcookies(headers, value):
+
+        if "cookie" in headers:
+            headers["Cookie"] = headers["cookie"]
+            del headers["cookie"]
+
+        cookie_header = "; ".join(
+                    [str(x) + "=" + str(y) for x, y in value.items()]
+                )
+
+        if cookie_header:
+            if headers.get("Cookie"):
+                headers["Cookie"] = (
+                            headers["Cookie"] + "; " + cookie_header
+                        )
+            else:
+                headers["Cookie"] = cookie_header
 
 @dataclass
 class TLSClient:
@@ -341,14 +358,16 @@ class TLSClient:
 
             headers = merged_headers
 
+        if isinstance(cookies, dict):
+            # addcookies(self.headers, cookies)
+            addcookies(headers, cookies)
+
         # Cookies
-        if isinstance(cookies, RequestsCookieJar):
+        elif isinstance(cookies, RequestsCookieJar):
             merge_cookies(self.cookies, cookies)
         elif isinstance(cookies, list):
             merge_cookies(self.cookies, list_to_cookiejar(cookies))
-        elif isinstance(cookies, dict):
-            self.cookies.set_cookie(cookiejar_from_dict(cookies))
-        print(headers)
+    
         # turn cookie jar into dict
 
         # Proxy

@@ -25,8 +25,7 @@ if detect_module():
 
 from .response import Response, ProcessResponse
 from .session import Session, TLSSession, chrome, firefox
-from .reqs import *
+# from .reqs import *
+from  . import request_functions as request
 from .headers import Headers
-
-
-from .__version__ import __version__
+from .request_class import Request

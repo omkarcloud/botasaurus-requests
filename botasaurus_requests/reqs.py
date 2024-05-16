@@ -276,13 +276,89 @@ Requests shortcuts
 '''
 
 # Shortcuts for creating synchronous requests
-get: partial = partial(request, 'GET')
-options: partial = partial(request, 'OPTIONS')
-head: partial = partial(request, 'HEAD')
-post: partial = partial(request, 'POST')
-put: partial = partial(request, 'PUT')
-patch: partial = partial(request, 'PATCH')
-delete: partial = partial(request, 'DELETE')
+_get: partial = partial(request, 'GET')
+_options: partial = partial(request, 'OPTIONS')
+_head: partial = partial(request, 'HEAD')
+_post: partial = partial(request, 'POST')
+_put: partial = partial(request, 'PUT')
+_patch: partial = partial(request, 'PATCH')
+_delete: partial = partial(request, 'DELETE')
+
+
+def add_google_referer_if_given(kwargs):
+    headers = kwargs.get('headers', {})
+    referer = kwargs.pop('referer', None)
+    # Set the referrer only if it's not None and 'Referer' is not already set in headers
+    if referer is not None and ('Referer' not in headers or 'referer' not in headers):
+        headers['Referer'] = referer
+        kwargs['headers'] = headers
+
+def fix_proxies(kwargs):
+    proxies = kwargs.pop('proxies', None)
+    # Set the referrer only if it's not None and 'Referer' is not already set in headers
+    if proxies is not None:
+        if isinstance(proxies, dict):
+            proxies = proxies.get("http", proxies.get("https"))
+        if proxies and isinstance(proxies, str):
+            kwargs['proxy'] = proxies
+        else: 
+            raise Exception("Invalid proxy format. Please provide a string.")
+
+def add_redirects(kwargs, default_value):
+    return {
+        'allow_redirects': default_value,
+        **kwargs, 
+    }
+
+# proxies
+def get(url: str, *args, **kwargs) -> Response:
+    '''
+    Send a GET request with TLS client
+    '''
+
+    add_google_referer_if_given(kwargs)
+    fix_proxies(kwargs)
+    
+
+    return _get(url, *args, **add_redirects(kwargs, True))
+
+def options(url: str, *args, **kwargs) -> Response:
+    '''
+    Send an OPTIONS request with TLS client
+    '''
+    fix_proxies(kwargs)
+    return _options(url, *args, **add_redirects(kwargs, False))
+
+def head(url: str, *args, **kwargs) -> Response:
+    '''
+    Send a HEAD request with TLS client
+    '''
+    fix_proxies(kwargs)
+    return _head(url, *args, **add_redirects(kwargs, True))
+def post(url: str, *args, **kwargs) -> Response:
+    '''
+    Send a POST request with TLS client
+    '''
+    fix_proxies(kwargs)
+    return _post(url, *args, **add_redirects(kwargs, True))
+def put(url: str, *args, **kwargs) -> Response:
+    '''
+    Send a PUT request with TLS client
+    '''
+    fix_proxies(kwargs)
+    return _put(url, *args, **add_redirects(kwargs, True))
+def patch(url: str, *args, **kwargs) -> Response:
+    '''
+    Send a PATCH request with TLS client
+    '''
+    fix_proxies(kwargs)
+    return _patch(url, *args, **add_redirects(kwargs, True))
+def delete(url: str, *args, **kwargs) -> Response:
+    '''
+    Send a DELETE request with TLS client
+    '''
+    fix_proxies(kwargs)
+    return _delete(url, *args, **add_redirects(kwargs, False))
 
 '''
 Asynchronous requests shortcuts

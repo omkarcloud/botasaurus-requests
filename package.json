@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "upload": "python increment_version.py && rm -rf dist/ botasaurus_requests.egg-info  && python setup.py sdist && pip install -e . && python -m twine upload dist/* --verbose",
+    "upload": "python increment_version.py && rm -rf dist/ botasaurus_requests/bin/hrequests-cgo-2.1-windows-4.0-amd64.dll botasaurus_requests/bin/CR_VERSIONS.json botasaurus_requests/bin/FF_VERSIONS.json botasaurus_requests.egg-info  && python setup.py sdist && pip install -e . && python -m twine upload dist/* --verbose",
     "install": "rm -rf dist/ botasaurus_requests.egg-info  && python setup.py sdist && pip install -e .",
     "local-install": "pip install ."
   }
