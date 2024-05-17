@@ -67,7 +67,6 @@ class ChromeVersions(VersionScraper):
         return re.sub(r'[^\d\.]', '', line)
 
     def download(self) -> List[str]:
-        print('Downloading Chrome version history...')
         versions: List[str]
         with httpx.stream('GET', self.resource) as r:
             lines = r.iter_lines()
@@ -101,7 +100,6 @@ class FirefoxVersions(VersionScraper):
     file_name: str = join(dirname(__file__), "bin", "FF_VERSIONS.json")
 
     def download(self) -> List[str]:
-        print('Downloading Firefox version history...')
         resp = httpx.get(self.resource)
         # gather version numbers
         versions: List[str]

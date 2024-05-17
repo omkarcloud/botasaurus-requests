@@ -11,7 +11,7 @@ class Request(Session):
 
     def get(
         self,
-        url: str | bytes,
+        url: str,
         referer="https://www.google.com/",
         params=None,
         data=None,
@@ -57,7 +57,7 @@ class Request(Session):
 
     def options(
         self,
-        url: str | bytes,
+        url: str,
         params=None,
         data=None,
         headers=None,
@@ -97,7 +97,7 @@ class Request(Session):
 
     def head(
         self,
-        url: str | bytes,
+        url: str,
         params=None,
         data=None,
         headers=None,
@@ -137,7 +137,7 @@ class Request(Session):
 
     def post(
         self,
-        url: str | bytes,
+        url: str,
         data=None,
         json=None,
         params=None,
@@ -177,7 +177,7 @@ class Request(Session):
 
     def put(
         self,
-        url: str | bytes,
+        url: str,
         data=None,
         json=None,
         params=None,
@@ -217,7 +217,7 @@ class Request(Session):
 
     def patch(
         self,
-        url: str | bytes,
+        url: str,
         data=None,
         json=None,
         params=None,
@@ -257,7 +257,7 @@ class Request(Session):
 
     def delete(
         self,
-        url: str | bytes,
+        url: str,
         params=None,
         data=None,
         headers=None,

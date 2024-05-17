@@ -82,7 +82,7 @@ class LibraryUpdate(LibraryManager):
         ver: Version = Version.get_version(filename)
 
         rprint(
-            f'[bright_green]:sparkles: Successfully installed cgo v{ver}! :tada:[/]'
+            f'[bright_green]:sparkles: Successfully installed dependencies v{ver}! :tada:[/]'
         )
 
     def update(self) -> None:
@@ -100,12 +100,12 @@ class LibraryUpdate(LibraryManager):
         # check if the version is the same as the latest avaliable version
         asset: Asset = self.latest_asset()
         if current_ver >= asset.version:
-            rprint('[bright_green]:sparkles: cgo library up to date! :tada:')
+            rprint('[bright_green]:sparkles: library up to date! :tada:')
             rprint(f'Current version: [green]v{current_ver}\n')
             return
 
         # download updated file
-        rprint(f'Updating cgo library from [red]v{current_ver}[/] => v{asset.version}')
+        rprint(f'Updating dependencies from [red]v{current_ver}[/] => v{asset.version}')
         # download new, remove old
         self.download_file(self.full_path, asset.url)
         try:
@@ -143,30 +143,6 @@ def update(headers=False, library=False):
     headers and HeaderUpdate().update()
 
 
-
-
-@cli.command(name='version')
-def version() -> None:
-
-
-    # library path
-    libup = LibraryUpdate()
-    path = libup.path
-    # if the library is not installed
-    if not path:
-        rprint('cgo:\t[red]Not installed!')
-        return
-    # library verion
-    lib_ver = Version.get_version(path)
-    rprint(f'cgo:\t[green]{lib_ver}')
-
-    # check for library updates
-    with Status('Checking for updates...'):
-        latest_ver = libup.latest_asset().version
-        if latest_ver == lib_ver:
-            rprint('\t\t([yellow]Up to date![/])')
-        else:
-            rprint(f'\t\t([yellow]latest = {latest_ver}[/])')
 
 
 if __name__ == '__main__':

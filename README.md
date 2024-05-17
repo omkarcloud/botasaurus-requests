@@ -1,6 +1,10 @@
 # Botasaurus Requests
 
-botasaurus-requests is a fork of the [hrequests](https://github.com/daijro/hrequests) library with the playwright dependencies removed.
+botasaurus-requests is a fork of the [hrequests](https://github.com/daijro/hrequests) library, featuring the following updates:
+
+- Removal of the playwright dependencies, to make it more lightweight.
+- Bug fixes to ensure smooth execution on Windows, eliminating runtime errors.
+- Addition of the Google Referer header in the get method to make requests more humane.
 
 ## Installation
 

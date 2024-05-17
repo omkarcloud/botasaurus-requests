@@ -13,7 +13,6 @@ from botasaurus_requests.__version__ import BRIDGE_VERSION
 
 root_dir: Path = Path(os.path.abspath(os.path.dirname(__file__)))
 
-# map machine architecture to cgo binary name
 arch_map = {
     'amd64': 'amd64',
     'x86_64': 'amd64',
@@ -102,7 +101,7 @@ class LibraryManager:
         return loads(resp.content)
 
     def download_library(self):
-        print('Downloading cgo library ...')
+        print('Downloading @request dependencies...')
         releases = self.get_releases()
         for release in releases:
             asset = self.check_assets(release['assets'])
