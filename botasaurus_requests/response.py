@@ -9,9 +9,9 @@ from orjson import dumps, loads
 from requests.exceptions import HTTPError
 
 
-from . import client, session
-from botasaurus_requests.cffi import library
-from botasaurus_requests.exceptions import ClientException
+from . import client
+from .cffi import library
+from .exceptions import ClientException
 
 from .cookies import RequestsCookieJar
 from .toolbelt import CaseInsensitiveDict, FileUtils
@@ -148,9 +148,7 @@ class Response:
 
     # set by ProcessResponse
     history: Optional[List['Response']] = None
-    session: Optional[
-        Union['session.TLSSession']
-    ] = None
+    session= None
     browser: Optional[Literal['firefox', 'chrome']] = None
     elapsed: Optional[timedelta] = None
     encoding: str = 'UTF-8'

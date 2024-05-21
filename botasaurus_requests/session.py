@@ -5,7 +5,6 @@ from typing import Literal, Optional, Tuple, Union
 
 import botasaurus_requests
 from .headers import Headers
-from .reqs import *
 from .response import ProcessResponse
 
 from .client import TLSClient
