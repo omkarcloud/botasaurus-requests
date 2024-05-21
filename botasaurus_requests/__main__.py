@@ -12,9 +12,9 @@ from rich import print as rprint
 from rich.panel import Panel
 from rich.status import Status
 
-from botasaurus_requests.__version__ import BRIDGE_VERSION
-from botasaurus_requests.cffi import LibraryManager, root_dir
-from botasaurus_requests.headers import ChromeVersions, FirefoxVersions
+from __version__ import BRIDGE_VERSION
+from .cffi import LibraryManager, root_dir
+from .headers import ChromeVersions, FirefoxVersions
 
 @total_ordering
 @dataclass

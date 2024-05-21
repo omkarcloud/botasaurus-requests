@@ -6,8 +6,9 @@ from requests.sessions import Session
 
 class Request(Session):
 
-    def __init__(self, proxy=None):
+    def __init__(self, proxy=None, user_agent=None):
         self._proxy = proxy
+        self._user_agent = user_agent
 
     def get(
         self,
@@ -17,6 +18,8 @@ class Request(Session):
         data=None,
         headers=None,
         browser: Optional[Literal["firefox", "chrome"]] = "firefox",
+        os: Optional[Literal["windows", "mac", "linux"]] = None,
+        user_agent: Optional[str] = None,
         cookies=None,
         files=None,
         auth=None,
@@ -48,6 +51,8 @@ class Request(Session):
             "json": json,
             # Special Param
             "browser": browser,
+            "user_agent": user_agent or self._user_agent,
+            "os": os,
             "referer": referer,
         }
 
@@ -62,6 +67,8 @@ class Request(Session):
         data=None,
         headers=None,
         browser: Optional[Literal["firefox", "chrome"]] = "firefox",
+        os: Optional[Literal["windows", "mac", "linux"]] = None,
+        user_agent: Optional[str] = None,
         cookies=None,
         files=None,
         auth=None,
@@ -91,6 +98,8 @@ class Request(Session):
                 "cert": cert,
                 "json": json,
                 "browser": browser,
+                "user_agent": user_agent or self._user_agent,
+                "os": os,
             }
         )
         return reqs.options(url, **self._merge_kwargs(kwargs))
@@ -102,6 +111,8 @@ class Request(Session):
         data=None,
         headers=None,
         browser: Optional[Literal["firefox", "chrome"]] = "firefox",
+        os: Optional[Literal["windows", "mac", "linux"]] = None,
+        user_agent: Optional[str] = None,
         cookies=None,
         files=None,
         auth=None,
@@ -131,6 +142,8 @@ class Request(Session):
                 "cert": cert,
                 "json": json,
                 "browser": browser,
+                "user_agent": user_agent or self._user_agent,
+                "os": os,
             }
         )
         return reqs.head(url, **self._merge_kwargs(kwargs))
@@ -143,6 +156,8 @@ class Request(Session):
         params=None,
         headers=None,
         browser: Optional[Literal["firefox", "chrome"]] = "firefox",
+        os: Optional[Literal["windows", "mac", "linux"]] = None,
+        user_agent: Optional[str] = None,
         cookies=None,
         files=None,
         auth=None,
@@ -171,6 +186,8 @@ class Request(Session):
                 "verify": verify,
                 "cert": cert,
                 "browser": browser,
+                "user_agent": user_agent or self._user_agent,
+                "os": os,
             }
         )
         return reqs.post(url, **self._merge_kwargs(kwargs))
@@ -183,6 +200,8 @@ class Request(Session):
         params=None,
         headers=None,
         browser: Optional[Literal["firefox", "chrome"]] = "firefox",
+        os: Optional[Literal["windows", "mac", "linux"]] = None,
+        user_agent: Optional[str] = None,
         cookies=None,
         files=None,
         auth=None,
@@ -211,6 +230,8 @@ class Request(Session):
                 "verify": verify,
                 "cert": cert,
                 "browser": browser,
+                "user_agent": user_agent or self._user_agent,
+                "os": os,
             }
         )
         return reqs.put(url, **kwargs)
@@ -223,6 +244,8 @@ class Request(Session):
         params=None,
         headers=None,
         browser: Optional[Literal["firefox", "chrome"]] = "firefox",
+        os: Optional[Literal["windows", "mac", "linux"]] = None,
+        user_agent: Optional[str] = None,
         cookies=None,
         files=None,
         auth=None,
@@ -251,6 +274,8 @@ class Request(Session):
                 "cert": cert,
                 "json": json,
                 "browser": browser,
+                "user_agent": user_agent or self._user_agent,
+                "os": os,
             }
         )
         return reqs.patch(url, **self._merge_kwargs(kwargs))
@@ -262,6 +287,8 @@ class Request(Session):
         data=None,
         headers=None,
         browser: Optional[Literal["firefox", "chrome"]] = "firefox",
+        os: Optional[Literal["windows", "mac", "linux"]] = None,
+        user_agent: Optional[str] = None,
         cookies=None,
         files=None,
         auth=None,
@@ -291,6 +318,8 @@ class Request(Session):
                 "cert": cert,
                 "json": json,
                 "browser": browser,
+                "user_agent": user_agent or self._user_agent,
+                "os": os,
             }
         )
         return reqs.delete(url, **self._merge_kwargs(kwargs))

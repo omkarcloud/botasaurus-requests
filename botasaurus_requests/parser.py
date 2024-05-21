@@ -9,7 +9,7 @@ from parse import Result, findall
 from parse import search as parse_search
 
 import botasaurus_requests
-from botasaurus_requests.exceptions import NotRenderedException, SelectorNotFoundException
+from .exceptions import NotRenderedException, SelectorNotFoundException
 
 """
 Parser structure inspired by https://github.com/psf/requests-html/blob/master/requests_html.py
@@ -416,29 +416,12 @@ class HTML(BaseParser):
     def __init__(
         self,
         *,
-        session: Optional[
-            Union['botasaurus_requests.session.TLSSession', 'botasaurus_requests.browser.BrowserSession']
-        ] = None,
+        session= None,
         url: str = DEFAULT_URL,
         html: _HTML,
     ) -> None:
-        # Convert incoming unicode HTML into bytes.
-        element = selectolax.lexbor.LexborHTMLParser(html)
-        super().__init__(
-            element=element,
-            url=url,
-            br_session=(
-                weakref.proxy(session)
-                if hasattr(botasaurus_requests, 'browser')  # if the browser module is imported
-                and isinstance(
-                    session, botasaurus_requests.browser.BrowserSession
-                )  # and session is a BrowserSession
-                else None
-            ),
-        )
-        self.session = session or botasaurus_requests.firefox.Session(temp=True)
-        self.page = None
-        self.next_symbol = DEFAULT_NEXT_SYMBOL
+        raise Exception('Unsupported')
+        
 
     def __repr__(self) -> str:
         return f"<HTML url={self.url!r}>"

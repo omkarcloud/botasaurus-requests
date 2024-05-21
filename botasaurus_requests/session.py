@@ -69,6 +69,7 @@ class TLSSession(TLSClient):
         super().__init__(client_identifier=client_identifier, *args, **kwargs)
 
         self.browser: str = browser  # browser name
+        from botasaurus_requests.reqs import get,post,options,head,put,patch, delete, async_delete, async_get, async_head, add_redirects, async_options, async_patch, async_post, async_put, async_request
 
         # sync network methods
         self.get: partial = partial(get, session=self)
@@ -126,7 +127,7 @@ class TLSSession(TLSClient):
     def render(self, *args, **kwargs):
         # shortcut to render method
         if 'playwright' in modules:
-            return botasaurus_requests.browser.render(*args, **kwargs, session=self, browser=self.browser)
+            return browser.render(*args, **kwargs, session=self, browser=self.browser)
         else:
             stderr.write('Cannot render. Playwright not installed.\n')
 
@@ -268,7 +269,8 @@ class SessionShortcut:
     def BrowserSession(
         cls,
         **kwargs,
-    ):
+    ):  
+        raise Exception('Not Supported')
         return botasaurus_requests.browser.BrowserSession(
             browser=cls.name,
             **kwargs,

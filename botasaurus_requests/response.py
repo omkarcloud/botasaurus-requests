@@ -8,7 +8,8 @@ from typing import List, Literal, Optional, Union
 from orjson import dumps, loads
 from requests.exceptions import HTTPError
 
-import botasaurus_requests
+
+from . import client, session
 from botasaurus_requests.cffi import library
 from botasaurus_requests.exceptions import ClientException
 
@@ -31,7 +32,7 @@ class ProcessResponse:
         cookies: Optional[Union[RequestsCookieJar, dict, list]] = None,
         **kwargs,
     ) -> None:
-        self.session: 'botasaurus_requests.session.TLSSession' = session
+        self.session= session
         self.method: str = method
         self.url: str = url
 
@@ -141,14 +142,14 @@ class Response:
 
     url: str
     status_code: int
-    headers: 'botasaurus_requests.client.CaseInsensitiveDict'
+    headers: 'client.CaseInsensitiveDict'
     cookies: RequestsCookieJar
     raw: Union[str, bytes] = None
 
     # set by ProcessResponse
     history: Optional[List['Response']] = None
     session: Optional[
-        Union['botasaurus_requests.session.TLSSession', 'botasaurus_requests.browser.BrowserSession']
+        Union['session.TLSSession']
     ] = None
     browser: Optional[Literal['firefox', 'chrome']] = None
     elapsed: Optional[timedelta] = None
@@ -286,7 +287,7 @@ def build_response(
         # add status code
         status_code=res["status"],
         # add headers
-        headers=botasaurus_requests.client.CaseInsensitiveDict(res_headers),
+        headers=client.CaseInsensitiveDict(res_headers),
         # add cookies
         cookies=res_cookies,
         # add response body

@@ -9,7 +9,7 @@ from typing import Optional, Tuple
 from httpx import get, stream
 from orjson import loads
 
-from botasaurus_requests.__version__ import BRIDGE_VERSION
+from .__version__ import BRIDGE_VERSION
 
 root_dir: Path = Path(os.path.abspath(os.path.dirname(__file__)))
 

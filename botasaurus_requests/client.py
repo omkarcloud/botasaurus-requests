@@ -8,7 +8,8 @@ from geventhttpclient import HTTPClient
 from orjson import dumps, loads
 
 import botasaurus_requests
-from botasaurus_requests.cffi import library
+from .cffi import library
+from . import response
 
 from .cookies import (
     RequestsCookieJar,
@@ -441,7 +442,7 @@ class TLSClient:
             response_headers=response_object['headers'],
         )
         # build response class
-        return botasaurus_requests.response.build_response(response_object, response_cookie_jar, proxy)
+        return response.build_response(response_object, response_cookie_jar, proxy)
 
     def build_response(
         self,

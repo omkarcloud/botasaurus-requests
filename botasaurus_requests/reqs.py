@@ -9,9 +9,11 @@ from urllib.parse import urlencode
 
 import gevent
 from gevent.pool import Pool
+from .session import Session, chrome
+from . import session
+from . import response
 
-import botasaurus_requests
-from botasaurus_requests.response import Response
+from .response import Response
 
 
 class TLSRequest:
@@ -65,7 +67,7 @@ class TLSRequest:
         self,
         method: str,
         url: str,
-        session: Optional['botasaurus_requests.session.TLSSession'] = None,
+        session: Optional['session.TLSSession'] = None,
         params: Optional[Dict[str, str]] = None,
         raise_exception: bool = True,
         **kwargs,
@@ -104,10 +106,10 @@ class TLSRequest:
         if session is None:
             if self.sess_kwargs:
                 # if session kwargs are passed, configure a new session with them
-                self.session = botasaurus_requests.Session(temp=True, **self.sess_kwargs)
+                self.session = Session(temp=True, **self.sess_kwargs)
             else:
                 # else use a preconfigured session
-                self.session = botasaurus_requests.chrome.Session(temp=True)
+                self.session = chrome.Session(temp=True)
             self._close = True
         else:
             # don't close adapters after each request if the user provided the session
@@ -292,8 +294,13 @@ def add_google_referer_if_given(kwargs):
     if referer is not None and ('Referer' not in headers or 'referer' not in headers):
         headers['Referer'] = referer
         kwargs['headers'] = headers
-
-def fix_proxies(kwargs):
+        
+os_mapping = {
+    'windows':'win',
+    'mac':'mac',
+    'linux':'lin',
+}
+def fix_headers(kwargs):
     proxies = kwargs.pop('proxies', None)
     # Set the referrer only if it's not None and 'Referer' is not already set in headers
     if proxies is not None:
@@ -303,6 +310,15 @@ def fix_proxies(kwargs):
             kwargs['proxy'] = proxies
         else: 
             raise Exception("Invalid proxy format. Please provide a string.")
+    user_agent = kwargs.pop('user_agent', None)
+    if user_agent is not None:
+        headers = kwargs.get('headers', {})
+        headers['User-Agent'] = user_agent
+        kwargs['headers'] = headers
+
+    os = kwargs.pop('os', None)
+    if os is not None:
+        kwargs['os'] = os_mapping[os]
 
 def add_redirects(kwargs, default_value):
     return {
@@ -317,7 +333,7 @@ def get(url: str, *args, **kwargs) -> Response:
     '''
 
     add_google_referer_if_given(kwargs)
-    fix_proxies(kwargs)
+    fix_headers(kwargs)
     
 
     return _get(url, *args, **add_redirects(kwargs, True))
@@ -326,38 +342,38 @@ def options(url: str, *args, **kwargs) -> Response:
     '''
     Send an OPTIONS request with TLS client
     '''
-    fix_proxies(kwargs)
+    fix_headers(kwargs)
     return _options(url, *args, **add_redirects(kwargs, False))
 
 def head(url: str, *args, **kwargs) -> Response:
     '''
     Send a HEAD request with TLS client
     '''
-    fix_proxies(kwargs)
+    fix_headers(kwargs)
     return _head(url, *args, **add_redirects(kwargs, True))
 def post(url: str, *args, **kwargs) -> Response:
     '''
     Send a POST request with TLS client
     '''
-    fix_proxies(kwargs)
+    fix_headers(kwargs)
     return _post(url, *args, **add_redirects(kwargs, True))
 def put(url: str, *args, **kwargs) -> Response:
     '''
     Send a PUT request with TLS client
     '''
-    fix_proxies(kwargs)
+    fix_headers(kwargs)
     return _put(url, *args, **add_redirects(kwargs, True))
 def patch(url: str, *args, **kwargs) -> Response:
     '''
     Send a PATCH request with TLS client
     '''
-    fix_proxies(kwargs)
+    fix_headers(kwargs)
     return _patch(url, *args, **add_redirects(kwargs, True))
 def delete(url: str, *args, **kwargs) -> Response:
     '''
     Send a DELETE request with TLS client
     '''
-    fix_proxies(kwargs)
+    fix_headers(kwargs)
     return _delete(url, *args, **add_redirects(kwargs, False))
 
 '''
@@ -426,7 +442,7 @@ def map(
         size = len(requests)
 
     for inc in range(0, len(requests), size):
-        processed_reqs: List[botasaurus_requests.response.ProcessResponse] = []
+        processed_reqs= []
         requests_range = requests[inc : min(inc + size, len(requests))]
         for req in requests_range:
             # prepare the request & construct sessions
@@ -437,7 +453,7 @@ def map(
                 req.session.request(req.method, req.url, **req.kwargs, process=False)
             )
         try:
-            resps: List[Optional[Response]] = botasaurus_requests.response.ProcessResponsePool(
+            resps: List[Optional[Response]] = response.ProcessResponsePool(
                 processed_reqs
             ).execute_pool()
         except Exception as e:
