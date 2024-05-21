@@ -4,9 +4,9 @@ from sys import modules, stderr
 from typing import Literal, Optional, Tuple, Union
 
 import botasaurus_requests
-from botasaurus_requests.headers import Headers
-from botasaurus_requests.reqs import *
-from botasaurus_requests.response import ProcessResponse
+from .headers import Headers
+from .reqs import *
+from .response import ProcessResponse
 
 from .client import TLSClient
 from .cookies import RequestsCookieJar
