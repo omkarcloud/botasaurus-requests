@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "upload": "python3 increment_version.py && rm -rf dist/ btr/bin/hrequests-cgo-2.1-windows-4.0-amd64.dll btr/bin/CR_VERSIONS.json btr/bin/FF_VERSIONS.json btr.egg-info  && python3 setup.py sdist && python3 -m pip install -e . && python3 -m twine upload dist/* --verbose",
+    "upload": "python3 increment_version.py && rm -rf dist/ botasaurus_requests/bin/hrequests-cgo-2.1-windows-4.0-amd64.dll  botasaurus_requests/bin/hrequests-cgo-2.1-darwin-arm64.dylib botasaurus_requests/bin/CR_VERSIONS.json botasaurus_requests/bin/FF_VERSIONS.json btr.egg-info  && python3 setup.py sdist && python3 -m pip install -e . && python3 -m twine upload dist/* --verbose",
     "install": "rm -rf dist/ btr.egg-info  && python3 setup.py sdist && python3 -m pip install -e .",
     "local-install": "python3 -m pip install ."
   }

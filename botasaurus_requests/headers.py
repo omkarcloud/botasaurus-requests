@@ -7,7 +7,21 @@ from random import randrange as rrange
 from typing import Callable, Dict, List, Optional
 
 import httpx
-import orjson
+import json
+ 
+def read_json(path):
+    with open(path, 'r', encoding="utf-8") as fp:
+        data = json.load(fp)
+        return data
+
+def read_file(path):
+    with open(path, 'r', encoding="utf-8") as fp:
+        content = fp.read()
+        return content
+        
+def write_json(data, path):
+    with open(path, 'w', encoding="utf-8") as fp:
+        json.dump(data, fp)
 
 
 class OSHeaders:
@@ -50,12 +64,10 @@ class VersionScraper:
         self.data = self.load()
 
     def load(self) -> List[str]:
-        with open(self.file_name, 'rb') as f:
-            return orjson.loads(f.read())
+        return read_json(self.file_name)
 
     def write_file(self, data: List[str]) -> None:
-        with open(self.file_name, 'wb') as f:
-            f.write(orjson.dumps(data))
+        write_json(data, self.file_name)
 
 
 class ChromeVersions(VersionScraper):

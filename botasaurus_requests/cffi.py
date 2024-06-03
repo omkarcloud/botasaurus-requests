@@ -7,7 +7,7 @@ from typing import Optional, Tuple
 
 
 from httpx import get, stream
-from orjson import loads
+from json import loads
 
 from .__version__ import BRIDGE_VERSION
 

@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from http.client import responses as status_codes
 from typing import List, Literal, Optional, Union
 
-from orjson import dumps, loads
+from json import dumps, loads
 from requests.exceptions import HTTPError
 
 

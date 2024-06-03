@@ -5,9 +5,8 @@ from typing import Dict, List, Optional, Set, Union
 from urllib.parse import urlencode
 
 from geventhttpclient import HTTPClient
-from orjson import dumps, loads
+from json import dumps, loads
 
-import botasaurus_requests
 from .cffi import library
 from . import response
 
