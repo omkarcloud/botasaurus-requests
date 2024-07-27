@@ -1,6 +1,5 @@
 from typing import Literal, Optional
 from . import reqs
-from requests.models import Response
 from requests.sessions import Session
 
 
@@ -31,7 +30,7 @@ class Request(Session):
         verify=None,
         cert=None,
         json=None,
-    ) -> Response:
+    ):
 
         # Only update kwargs with non-None named arguments
         named_args = {
@@ -80,7 +79,7 @@ class Request(Session):
         verify=None,
         cert=None,
         json=None,
-    ) -> Response:
+    ) :
         kwargs = self._merge_kwargs(
             {
                 "params": params,
@@ -124,7 +123,7 @@ class Request(Session):
         verify=None,
         cert=None,
         json=None,
-    ) -> Response:
+    ) :
         kwargs = self._merge_kwargs(
             {
                 "params": params,
@@ -168,7 +167,7 @@ class Request(Session):
         stream=None,
         verify=None,
         cert=None,
-    ) -> Response:
+    ) :
         kwargs = self._merge_kwargs(
             {
                 "data": data,
@@ -212,7 +211,7 @@ class Request(Session):
         stream=None,
         verify=None,
         cert=None,
-    ) -> Response:
+    ) :
         kwargs = self._merge_kwargs(
             {
                 "data": data,
@@ -256,7 +255,7 @@ class Request(Session):
         stream=None,
         verify=None,
         cert=None,
-    ) -> Response:
+    ) :
         kwargs = self._merge_kwargs(
             {
                 "data": data,
@@ -300,7 +299,7 @@ class Request(Session):
         verify=None,
         cert=None,
         json=None,
-    ) -> Response:
+    ) :
         kwargs = self._merge_kwargs(
             {
                 "params": params,

@@ -1,3 +1,5 @@
+import json
+
 from requests.utils import get_encoding_from_headers
 import re
 from dataclasses import dataclass
@@ -115,7 +117,22 @@ class ProcessResponsePool:
             proc.session.build_response(proc.url, proc.full_headers, data, payload['proxyUrl'])
             for proc, data in zip(self.pool, response_object)
         ]
+    
+def extract_next_data(html_string):
+    from bs4 import BeautifulSoup
 
+    soup = BeautifulSoup(html_string, "html.parser")
+    el = soup.select_one("#__NEXT_DATA__")
+    if not el:
+        raise Exception("No Next.js Data Found")
+
+    next_data = json.loads(el.text)
+
+    if "props" in next_data:
+                next_data = next_data.get("props")
+    if "pageProps" in next_data:
+                next_data = next_data.get("pageProps")
+    return next_data
 
 @dataclass
 class Response:
@@ -156,7 +173,7 @@ class Response:
     proxy: Optional[str] = None
 
     def __post_init__(self) -> None:
-        self.encoding = get_encoding_from_headers(self.headers)
+        self.encoding = get_encoding_from_headers(self.headers) or 'utf-8'
         
     @property
     def reason(self) -> str:
@@ -198,7 +215,14 @@ class Response:
         '''Returns True if :attr:`status_code` is less than 400'''
         return self.ok
 
-
+    def get_next_data(self):
+        # Ensure headers attribute is accessed correctly
+        content_type = self.headers.get('Content-Type', '').lower()
+        if 'text/html' in content_type:
+            # Assuming extract_next_data is a function that needs to be defined or imported
+            return extract_next_data(self.text)
+        else:
+            raise ValueError("Content Type must be HTML")
     def raise_for_status(self):
         """Raises :class:`HTTPError`, if one occurred."""
 

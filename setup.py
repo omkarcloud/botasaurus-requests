@@ -10,7 +10,7 @@ def get_description():
 
 setup(
     name="botasaurus_requests",
-    version='4.0.28',
+    version='4.0.31',
     description="botasaurus_requests is a fork of the requests library with the playwright dependencies removed.",
     long_description_content_type="text/markdown",
     long_description=get_description(),
@@ -39,6 +39,7 @@ setup(
         "geventhttpclient",
         "urllib3",
         "rich",
+        "beautifulsoup4>=4.11.2",
         "click",
         "gevent"
     ],

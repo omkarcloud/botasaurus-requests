@@ -319,6 +319,13 @@ def fix_headers(kwargs):
     os = kwargs.pop('os', None)
     if os is not None:
         kwargs['os'] = os_mapping[os]
+    
+    if isinstance(kwargs['headers'], dict):
+        # fix bug for ints not working
+        for key, value in kwargs['headers'].items():
+            # if isinstance(kwargs['headers'], int):
+            
+            kwargs['headers'][key] = str(value)
 
 def add_redirects(kwargs, default_value):
     return {
