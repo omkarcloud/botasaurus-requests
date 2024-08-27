@@ -19,8 +19,8 @@ def detect_module() -> bool:
     return False
 
 
-if detect_module():
-    os.environ['BOTASAURUS_REQUESTS_MODULE'] = '1'
+# if detect_module():
+#     os.environ['BOTASAURUS_REQUESTS_MODULE'] = '1'
 
 
 from .response import Response, ProcessResponse
