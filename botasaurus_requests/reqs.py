@@ -14,6 +14,7 @@ from . import session
 from . import response
 
 from .response import Response
+import time
 
 
 class TLSRequest:
@@ -333,6 +334,19 @@ def add_redirects(kwargs, default_value):
         **kwargs, 
     }
 
+
+def retry_on_network_error(func: Callable):
+        while True:
+            try:
+                return func()
+            except Exception as e:
+                if 'dial tcp: lookup' in str(e) and 'no such host' in str(e):
+                    print(f"Network error occurred: {e}. Retrying in 20 seconds...")
+                    time.sleep(20)
+                    print("Retrying now...")
+                else:
+                    raise e
+
 # proxies
 def get(url: str, *args, **kwargs) -> Response:
     '''
@@ -343,45 +357,45 @@ def get(url: str, *args, **kwargs) -> Response:
     fix_headers(kwargs)
     
 
-    return _get(url, *args, **add_redirects(kwargs, True))
+    return retry_on_network_error(lambda: _get(url, *args, **add_redirects(kwargs, True)))
 
 def options(url: str, *args, **kwargs) -> Response:
     '''
     Send an OPTIONS request with TLS client
     '''
     fix_headers(kwargs)
-    return _options(url, *args, **add_redirects(kwargs, False))
+    return retry_on_network_error(lambda: _options(url, *args, **add_redirects(kwargs, False)))
 
 def head(url: str, *args, **kwargs) -> Response:
     '''
     Send a HEAD request with TLS client
     '''
     fix_headers(kwargs)
-    return _head(url, *args, **add_redirects(kwargs, True))
+    return retry_on_network_error(lambda: _head(url, *args, **add_redirects(kwargs, True)))
 def post(url: str, *args, **kwargs) -> Response:
     '''
     Send a POST request with TLS client
     '''
     fix_headers(kwargs)
-    return _post(url, *args, **add_redirects(kwargs, True))
+    return retry_on_network_error(lambda: _post(url, *args, **add_redirects(kwargs, True)))
 def put(url: str, *args, **kwargs) -> Response:
     '''
     Send a PUT request with TLS client
     '''
     fix_headers(kwargs)
-    return _put(url, *args, **add_redirects(kwargs, True))
+    return retry_on_network_error(lambda: _put(url, *args, **add_redirects(kwargs, True)))
 def patch(url: str, *args, **kwargs) -> Response:
     '''
     Send a PATCH request with TLS client
     '''
     fix_headers(kwargs)
-    return _patch(url, *args, **add_redirects(kwargs, True))
+    return retry_on_network_error(lambda: _patch(url, *args, **add_redirects(kwargs, True)))
 def delete(url: str, *args, **kwargs) -> Response:
     '''
     Send a DELETE request with TLS client
     '''
     fix_headers(kwargs)
-    return _delete(url, *args, **add_redirects(kwargs, False))
+    return retry_on_network_error(lambda: _delete(url, *args, **add_redirects(kwargs, False)))
 
 '''
 Asynchronous requests shortcuts
