@@ -117,7 +117,6 @@ class ProcessResponsePool:
             proc.session.build_response(proc.url, proc.full_headers, data, payload['proxyUrl'])
             for proc, data in zip(self.pool, response_object)
         ]
-    
 def extract_next_data(html_string):
     from bs4 import BeautifulSoup
 
@@ -126,13 +125,16 @@ def extract_next_data(html_string):
     if not el:
         raise Exception("No Next.js Data Found")
 
-    next_data = json.loads(el.text)
-
+    next_data = json.loads(el.text) 
+    return next_data
+def extract_next_page_props(html_string):
+    next_data = extract_next_data(html_string)
     if "props" in next_data:
                 next_data = next_data.get("props")
     if "pageProps" in next_data:
                 next_data = next_data.get("pageProps")
     return next_data
+
 
 @dataclass
 class Response:
@@ -223,6 +225,16 @@ class Response:
             return extract_next_data(self.text)
         else:
             raise ValueError("Content Type must be HTML")
+        
+
+    def get_next_page_props(self):
+        # Ensure headers attribute is accessed correctly
+        content_type = self.headers.get('Content-Type', '').lower()
+        if 'text/html' in content_type:
+            # Assuming extract_next_data is a function that needs to be defined or imported
+            return extract_next_page_props(self.text)
+        else:
+            raise ValueError("Content Type must be HTML")        
     def raise_for_status(self):
         """Raises :class:`HTTPError`, if one occurred."""
 

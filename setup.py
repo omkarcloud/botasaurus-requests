@@ -10,7 +10,7 @@ def get_description():
 
 setup(
     name="botasaurus_requests",
-    version='4.0.36',
+    version='4.0.38',
     description="botasaurus_requests is a fork of the requests library with the playwright dependencies removed.",
     long_description_content_type="text/markdown",
     long_description=get_description(),
